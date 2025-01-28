@@ -17,7 +17,7 @@ This project demonstrates how to use Qdrant as a vector database to store and qu
 
 1. Clone the repository:
     ```bash
-    git clone [<your-repo-url>](https://github.com/RGGH/rig-qdr)
+    git clone https://github.com/RGGH/rig-qdr
     cd rig-qdr
     ```
 
