@@ -58,19 +58,6 @@ async fn main() -> Result<(), anyhow::Error> {
         ));
     }
 
-    //let points: Vec<PointStruct> = documents
-    //.into_iter()
-    //.map(|d| {
-    //PointStruct::new(
-    //d.0,
-    //embeddings,
-    //Payload::try_from(json!({
-    //"document": d,
-    //}))
-    //.unwrap(),
-    //)
-    //})
-    //.collect();
 
     // Map documents and embeddings to Qdrant points
     let points: Vec<PointStruct> = documents
@@ -104,6 +91,22 @@ async fn main() -> Result<(), anyhow::Error> {
     qdrant_client
         .upsert_points(UpsertPointsBuilder::new(COLLECTION_NAME, points))
         .await?;
+
+    let query_params = QueryPointsBuilder::new(COLLECTION_NAME).with_payload(true);
+
+    // ------- query
+    let query_vector = embeddings[0].clone();
+
+    // Perform a query in Qdrant
+
+    let search_result = qdrant_client
+    .query(
+        QueryPointsBuilder::new(COLLECTION_NAME)
+            .query(query_vector)
+    )
+    .await?;
+
+dbg!(search_result);
 
     Ok(())
 }
