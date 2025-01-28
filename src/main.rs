@@ -1,4 +1,3 @@
-#![allow(unused)]
 use dotenv::dotenv;
 use fastembed::{EmbeddingModel, InitOptions, TextEmbedding};
 use qdrant_client::{
@@ -6,14 +5,12 @@ use qdrant_client::{
         CreateCollectionBuilder, Distance, PointStruct, QueryPointsBuilder, UpsertPointsBuilder,
         Value, VectorParamsBuilder,
     },
-    Payload, Qdrant,
+    Qdrant,
 };
 use std::collections::HashMap;
 
-use rig::{providers::openai::Client, vector_store::VectorStoreIndex};
-use rig_qdrant::QdrantVectorStore;
+use rig::providers::openai::Client;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
 use uuid::Uuid;
 
 const COLLECTION_NAME: &str = "rig-collection";
@@ -58,7 +55,6 @@ async fn main() -> Result<(), anyhow::Error> {
         ));
     }
 
-
     // Map documents and embeddings to Qdrant points
     let points: Vec<PointStruct> = documents
         .into_iter()
@@ -98,15 +94,15 @@ async fn main() -> Result<(), anyhow::Error> {
     let query_vector = embeddings[0].clone();
 
     // Perform a query in Qdrant
-
     let search_result = qdrant_client
-    .query(
-        QueryPointsBuilder::new(COLLECTION_NAME)
-            .query(query_vector)
-    )
-    .await?;
+        .query(QueryPointsBuilder::new(COLLECTION_NAME).query(query_vector))
+        .await?;
 
-dbg!(search_result);
+    dbg!(search_result);
+
+
+
+
 
     Ok(())
 }
